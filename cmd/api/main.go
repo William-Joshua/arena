@@ -1,14 +1,12 @@
 module cc.io/arena
 
-// main.go
-package main
-
-import (
-	"github.com/gin-gonic/gin"
+// Version information injected using ldflags
+var ( 
+	version = "dev"
+	commit = "unknown"
+	date = "unknown"
 )
 
 func main() {
-	app := gin.Default()
-	// Setup routes, middleware, etc.
-	app.Run() // Run the server
+	cmd.Execute()
 }
