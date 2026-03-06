@@ -1,40 +1,33 @@
 package main
 
 import (
-	"github.com/spf13/cobra"
+	"fmt"
 	"os"
+
+	"github.com/spf13/cobra"
 )
 
-// Setup the Cobra root command
+// version information can be injected at build time via ldflags:
+//
+//	go build -ldflags="-X main.version=1.0.0 -X main.commit=abc -X main.date=2024-01-01"
+var (
+	version = "dev"
+	commit  = "unknown"
+	date    = "unknown"
+)
+
 func main() {
-	var rootCmd = &cobra.Command{
-		Use: "app",
-		Short: "An application that does something",
+	rootCmd := &cobra.Command{
+		Use:   "arena",
+		Short: "Arena application",
 	}
 
-	// Adding subcommands
-	rootCmd.AddCommand(apiserverCmd)
-	rootCmd.AddCommand(migrateCmd)
-	rootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(newApiserverCmd())
+	rootCmd.AddCommand(newMigrateCmd())
+	rootCmd.AddCommand(newVersionCmd())
 
-	// Execute the command
 	if err := rootCmd.Execute(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
-}
-
-// Placeholders for actual commands
-var apiserverCmd = &cobra.Command{
-	Use: "apiserver",
-	Short: "Run the API server",
-}
-
-var migrateCmd = &cobra.Command{
-	Use: "migrate",
-	Short: "Run the database migrations",
-}
-
-var versionCmd = &cobra.Command{
-	Use: "version",
-	Short: "Print the version",
 }
